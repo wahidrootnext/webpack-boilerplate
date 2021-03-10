@@ -1,33 +1,38 @@
-const path = require("path")
-const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const path = require("path");
+const webpack = require("webpack");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
 	mode: 'development',
-	entry: [
-		__dirname + '/src/js/scripts.js',
-		__dirname + '/src/scss/style.scss'
-	],
+	entry: __dirname + '/src/index.js',
 	output: {
 		filename: "js/scripts.bundle.js",
-		path: path.resolve(__dirname, 'public')
+		path: path.resolve(__dirname, 'dist')
 	},
 	module: {
 		rules: [
 			{
-				test: /\.scss$/i,
+				test: /favicon\.(png|jpe?g|gif|ico)$/i,
 				use: [
 					{
-						loader: MiniCssExtractPlugin.loader,
+						loader: 'file-loader',
 						options: {
-							publicPath: path.resolve(__dirname, 'public')
-						}
+							name: '[name].[ext]',
+						},
 					},
+				],
+			},
+			{
+				test: /\.(scss)$/,
+				exclude: /(node_modules)/,
+				use: [
+					MiniCssExtractPlugin.loader,
 					"css-loader",
 					"sass-loader"
 				],
 			},
 			{
-				test: /\*.js$/,
+				test: /\.(js)$/,
 				exclude: /(node_modules)/,
 				use: {
 					loader: 'babel-loader',
@@ -39,8 +44,12 @@ module.exports = {
 		],
 	},
 	plugins: [
+		new webpack.ProvidePlugin({
+			$: "jquery",
+			jQuery: "jquery"
+		}),
 		new MiniCssExtractPlugin({
-			filename: "css/style.bundle.css"
+			filename: 'css/styles.bundle.css'
 		})
-	],
+	]
 }

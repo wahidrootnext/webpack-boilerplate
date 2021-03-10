@@ -1,5 +1,3 @@
-import jQuery from "jquery";
-window.$ = window.jQuery = jQuery;
+import 'jquery';
 import '@popperjs/core';
 import 'bootstrap';
-import './customs'
