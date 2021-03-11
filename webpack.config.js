@@ -13,6 +13,7 @@ module.exports = {
 		rules: [
 			{
 				test: /favicon\.(png|jpe?g|gif|ico)$/i,
+				exclude: /(node_modules)/,
 				use: [
 					{
 						loader: 'file-loader',
@@ -23,13 +24,28 @@ module.exports = {
 				],
 			},
 			{
-				test: /\.(scss)$/,
+				test: /\.(s?css)$/,
 				exclude: /(node_modules)/,
 				use: [
-					MiniCssExtractPlugin.loader,
+					{
+						loader: MiniCssExtractPlugin.loader,
+						options: {
+							publicPath: "../",
+						},
+					},
 					"css-loader",
 					"sass-loader"
 				],
+			},
+			{
+				test: /\.(ttf|eot|woff|woff2|svg)$/,
+				use: {
+					loader: 'file-loader',
+					options: {
+						name: '[name].[ext]',
+						outputPath: 'fonts/'
+					},
+				},
 			},
 			{
 				test: /\.(js)$/,
@@ -40,7 +56,7 @@ module.exports = {
 						presets: ['@babel/preset-env']
 					}
 				}
-			}
+			},
 		],
 	},
 	plugins: [
@@ -51,5 +67,5 @@ module.exports = {
 		new MiniCssExtractPlugin({
 			filename: 'css/styles.bundle.css'
 		})
-	]
+	],
 }
